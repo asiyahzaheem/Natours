@@ -36,3 +36,10 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
+process.on('SIGTERM', () => {
+  // sigtrm is a signal that cuases a program to stop running
+  console.log(' 💥 Sigterm received, shutting down gracfully');
+  server.close(() => {
+    console.log('💥 Process terminated');
+  });
+});
