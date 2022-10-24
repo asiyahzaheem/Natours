@@ -16,7 +16,6 @@ exports.getOverview = catchAsync(async (req, res, next) => {
   });
 });
 exports.getTour = catchAsync(async (req, res, next) => {
-  console.log(process.env.NODE_ENV);
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
     fields: 'reviews rating user',

@@ -38,7 +38,6 @@ const createSendToken = (user, statusCode, res) => {
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
   await new Email(newUser, url).sendWelcome();
   createSendToken(newUser, 201, res);
 });
@@ -91,7 +90,6 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
   // something wrong here
   if (!freshUser.changedPasswordAfter(decoded.iat)) {
-    console.log('error from line 77');
     return next(
       new AppError('User recently changed password! Please login again!', 401)
     );
@@ -133,7 +131,6 @@ exports.isLoggedIn = async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    console.log(roles);
     if (!roles.includes(req.user.role)) {
       return next(
         new AppError('You do not have permision to access this route', 403)
@@ -159,7 +156,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     const resetURL = `${req.protocol}://${req.get(
       'host'
     )}/api/v1/users/resetPassword/${resetToken}`;
-    console.log(resetURL);
     await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({

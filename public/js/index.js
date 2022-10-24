@@ -27,7 +27,6 @@ if (loginForm) {
   });
 }
 if (logOutBtn) {
-  console.log('hi');
   logOutBtn.addEventListener('click', logout);
 }
 if (userDataForm) {

@@ -52,7 +52,6 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function (next) {
-  console.log('doc middleware!');
   // only run if password was modified
   if (!this.isModified('password')) return next();
   //hash pw w cost of 12
@@ -65,12 +64,7 @@ userSchema.pre('save', async function (next) {
 userSchema.pre('save', function (next) {
   if (!this.isModified('password') || this.isNew) return next();
   this.passwordChangedAt = Date.now() - 1000; // sometimes the pwChangedAt maybe be set after the jwt bcs of slow connection therefore we have to save an inaccurate val
-  console.log(
-    `password changed at ${parseInt(
-      this.passwordChangedAt.getTime() / 1000,
-      10
-    )}`
-  );
+
   next();
 });
 userSchema.pre(/^find/, function (next) {
@@ -89,10 +83,6 @@ userSchema.methods.changedPasswordAfter = async function (JWTTimestamp) {
       this.passwordChangedAt.getTime() / 1000,
       10
     );
-    console.log('jwt time stamp', JWTTimestamp);
-    console.log('changed time stamp', changedTimestamp);
-
-    console.log(JWTTimestamp < changedTimestamp);
     return JWTTimestamp < changedTimestamp; // changed pw after creating token
   }
   return false;
@@ -105,7 +95,6 @@ userSchema.methods.createPasswordResetToken = function () {
     .update(resetToken)
     .digest('hex');
 
-  // console.log({ resetToken }, this.passwordResetToken);
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
