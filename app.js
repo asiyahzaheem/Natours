@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
@@ -24,6 +25,10 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // GLOBAL MIDDLEWARES
+
+app.use(cors()); // access control allow origin header *
+app.options('*', cors()); // options is an http method (preflight phase that is sent before non-simple requests such as delete, put, patch)
+// app.options('/api/v1/tour/:id', cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 const scriptSrcUrls = [
