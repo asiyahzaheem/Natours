@@ -78,7 +78,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 app.post(
   '/webhook-checkout',
-  express.raw({ type: 'application/json' }), // the body needs to e in raw form and not json
+  express.raw({ type: 'application/*' }), // the body needs to e in raw form and not json
   bookingController.webhookCheckout
 );
 
